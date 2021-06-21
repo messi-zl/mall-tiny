@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * Created by macro on 2018/4/26.
  */
 @Controller
-@Api(tags = "UmsAdminController", description = "后台用户管理")
+@Api(tags = "UmsAdminController", description = "后台用户管理啊啊啊")
 @RequestMapping("/admin")
 public class UmsAdminController {
     @Value("${jwt.tokenHeader}")
@@ -57,10 +57,10 @@ public class UmsAdminController {
     @ApiOperation(value = "登录以后返回token")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult login(@Validated @RequestBody UmsAdminLoginParam umsAdminLoginParam) {
-        String token = adminService.login(umsAdminLoginParam.getUsername(), umsAdminLoginParam.getPassword());
+    public CommonResult login(@Validated @RequestBody UmsAdminLoginParam umsAdminLoginParam) { //zznote: @Validated对参数进行校验
+        String token = adminService.login(umsAdminLoginParam.getUsername(), umsAdminLoginParam.getPassword());//zznote:用户登录获取token
         if (token == null) {
-            return CommonResult.validateFailed("用户名或密码错误");
+            return CommonResult.validateFailed("用户名或密码错误");//zznote:CommonResult为封装好的返回结果
         }
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);

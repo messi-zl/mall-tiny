@@ -64,13 +64,13 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
     @Override
     public UmsAdmin getAdminByUsername(String username) {
         UmsAdmin admin = adminCacheService.getAdmin(username);
-        if(admin!=null) return  admin;
-        QueryWrapper<UmsAdmin> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(UmsAdmin::getUsername,username);
+        if(admin!=null) return  admin; //zznote：先去redis上拿，不存在再去访问数据库
+        QueryWrapper<UmsAdmin> wrapper = new QueryWrapper<>();//zznote:QueryWrapper mybaits-plus构造器
+        wrapper.lambda().eq(UmsAdmin::getUsername,username);//zznote：lambda的表达式 :：
         List<UmsAdmin> adminList = list(wrapper);
         if (adminList != null && adminList.size() > 0) {
             admin = adminList.get(0);
-            adminCacheService.setAdmin(admin);
+            adminCacheService.setAdmin(admin);//zznote:查询出来之后放入缓存中
             return admin;
         }
         return null;
@@ -101,8 +101,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
         String token = null;
         //密码需要客户端加密后传递
         try {
-            UserDetails userDetails = loadUserByUsername(username);
-            if(!passwordEncoder.matches(password,userDetails.getPassword())){
+            UserDetails userDetails = loadUserByUsername(username);//zznote:UserDetails为Spring Security的用户信息，实际返回的是AdminUserDetails(UmsAdmin,resourceList)
+            if(!passwordEncoder.matches(password,userDetails.getPassword())){ //zznote:  AdminUserDetails封装了UmsAdmin和List<UmsResource>
                 Asserts.fail("密码不正确");
             }
             if(!userDetails.isEnabled()){
@@ -110,7 +110,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = jwtTokenUtil.generateToken(userDetails);
+            token = jwtTokenUtil.generateToken(userDetails);//zznote:获取token
 //            updateLoginTimeByUsername(username);
             insertLoginLog(username);
         } catch (AuthenticationException e) {
@@ -260,7 +260,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
         UmsAdmin admin = getAdminByUsername(username);
         if (admin != null) {
             List<UmsResource> resourceList = getResourceList(admin.getId());
-            return new AdminUserDetails(admin,resourceList);
+            return new AdminUserDetails(admin,resourceList); //zznote:AdminUserDetails实现了UserDetails，
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }

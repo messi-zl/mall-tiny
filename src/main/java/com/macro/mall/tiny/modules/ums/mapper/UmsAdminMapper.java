@@ -19,6 +19,6 @@ public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
     /**
      * 获取资源相关用户ID列表
      */
-    List<Long> getAdminIdList(@Param("resourceId") Long resourceId);
+    List<Long> getAdminIdList(@Param("resourceId") Long resourceId); //zznote：自定义sql编写，涉及多表查询，需要
 
 }
