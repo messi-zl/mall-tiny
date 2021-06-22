@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sim.wifi.upgrade.modules.permissions.mapper.LogsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sim.wifi.upgrade.modules.permissions.model.Logs">
+        <id column="id" property="id" />
+        <result column="action" property="action" />
+        <result column="user_id" property="userId" />
+        <result column="dashboard_id" property="dashboardId" />
+        <result column="slice_id" property="sliceId" />
+        <result column="json" property="json" />
+        <result column="dttm" property="dttm" />
+        <result column="duration_ms" property="durationMs" />
+        <result column="referrer" property="referrer" />
+        <result column="request_path" property="requestPath" />
+    </resultMap>
+
+</mapper>

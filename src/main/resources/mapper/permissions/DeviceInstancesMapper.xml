@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sim.wifi.upgrade.modules.permissions.mapper.DeviceInstancesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sim.wifi.upgrade.modules.permissions.model.DeviceInstances">
+        <id column="id" property="id" />
+        <result column="created_on" property="createdOn" />
+        <result column="changed_on" property="changedOn" />
+        <result column="model" property="model" />
+        <result column="call_id" property="callId" />
+        <result column="mac" property="mac" />
+        <result column="sn" property="sn" />
+        <result column="uuid" property="uuid" />
+        <result column="hard_version" property="hardVersion" />
+        <result column="soft_version" property="softVersion" />
+        <result column="run" property="run" />
+        <result column="manual" property="manual" />
+        <result column="doing" property="doing" />
+        <result column="created_by_fk" property="createdByFk" />
+        <result column="changed_by_fk" property="changedByFk" />
+    </resultMap>
+
+</mapper>
