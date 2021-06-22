@@ -1,7 +1,8 @@
 package com.sim.wifi.upgrade.domain;
 
-import com.sim.wifi.upgrade.modules.ums.model.UmsAdmin;
-import com.sim.wifi.upgrade.modules.ums.model.UmsResource;
+import com.sim.wifi.upgrade.modules.permissions.model.AbUser;
+/*import com.sim.wifi.upgrade.modules.ums.model.UmsAdmin;
+import com.sim.wifi.upgrade.modules.ums.model.UmsResource;*/
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,19 +16,20 @@ import java.util.stream.Collectors;
  * Created by macro on 2018/4/26.
  */
 public class AdminUserDetails implements UserDetails {
-    private UmsAdmin umsAdmin;
-    private List<UmsResource> resourceList;
+    private AbUser umsAdmin;
+/*    private List<UmsResource> resourceList;
     public AdminUserDetails(UmsAdmin umsAdmin, List<UmsResource> resourceList) {
         this.umsAdmin = umsAdmin;
         this.resourceList = resourceList;
-    }
+    }*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的角色
-        return resourceList.stream()
+/*        return resourceList.stream()
                 .map(role ->new SimpleGrantedAuthority(role.getId()+":"+role.getName()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        return null;
     }
 
     @Override
@@ -57,6 +59,6 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return umsAdmin.getStatus().equals(1);
+        return umsAdmin.getActive().equals(1);
     }
 }

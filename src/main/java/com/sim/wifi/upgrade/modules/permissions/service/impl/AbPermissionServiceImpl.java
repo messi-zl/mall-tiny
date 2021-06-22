@@ -4,7 +4,6 @@ import com.sim.wifi.upgrade.modules.permissions.model.AbPermission;
 import com.sim.wifi.upgrade.modules.permissions.mapper.AbPermissionMapper;
 import com.sim.wifi.upgrade.modules.permissions.service.AbPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sim.wifi.upgrade.modules.ums.service.impl.UmsAdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

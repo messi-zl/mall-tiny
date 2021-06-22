@@ -1,8 +1,8 @@
 package com.sim.wifi.upgrade.config;
 
-import com.sim.wifi.upgrade.modules.ums.model.UmsResource;
+/*import com.sim.wifi.upgrade.modules.ums.model.UmsResource;
 import com.sim.wifi.upgrade.modules.ums.service.UmsAdminService;
-import com.sim.wifi.upgrade.modules.ums.service.UmsResourceService;
+import com.sim.wifi.upgrade.modules.ums.service.UmsResourceService;*/
 import com.sim.wifi.upgrade.security.component.DynamicSecurityService;
 import com.sim.wifi.upgrade.security.config.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MallSecurityConfig extends SecurityConfig {
 
-    @Autowired
+/*    @Autowired
     private UmsAdminService adminService;
     @Autowired
     private UmsResourceService resourceService;
@@ -50,5 +50,5 @@ public class MallSecurityConfig extends SecurityConfig {
                 return map;
             }
         };
-    }
+    }*/
 }
