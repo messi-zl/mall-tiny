@@ -34,7 +34,8 @@ public class MallSecurityConfig extends SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return username -> adminService.loadUserByUsername(username);
+        String str = new String();
+        return username -> adminService.loadUserByUsername(username); //userDetailsService(): SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现
     }
 
     @Bean

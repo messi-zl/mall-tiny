@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * SpringSecurity需要的用户详情
  * Created by macro on 2018/4/26.
  */
-public class AdminUserDetails implements UserDetails {
+public class AdminUserDetails implements UserDetails { //UserDetails:SpringSecurity定义用于封装用户信息的类（主要是用户信息和权限），需要自行实现
     private UmsAdmin umsAdmin;
     private List<UmsResource> resourceList;
     public AdminUserDetails(UmsAdmin umsAdmin, List<UmsResource> resourceList) {

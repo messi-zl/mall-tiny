@@ -25,7 +25,7 @@ import java.io.IOException;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService; //:SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Value("${jwt.tokenHeader}")
@@ -38,7 +38,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String authHeader = request.getHeader(this.tokenHeader);
-        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
+        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {//第一次登录的时候不会进入该方法
             String authToken = authHeader.substring(this.tokenHead.length());// The part after "Bearer "
             String username = jwtTokenUtil.getUserNameFromToken(authToken);
             LOGGER.info("checking username:{}", username);
@@ -52,6 +52,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 }
             }
         }
-        chain.doFilter(request, response);
+        chain.doFilter(request, response);//会去调用DynamicSecurityFilter的doFilter方法。因为在项目启动的时候DynamicSecurityFilter已经在SecurityConfig加载完
     }
 }
