@@ -38,6 +38,7 @@ public class MallSecurityConfig extends SecurityConfig {
         return username -> adminService.loadUserByUsername(username); //userDetailsService(): SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现
     }
 
+    //动态权限
     @Bean
     public DynamicSecurityService dynamicSecurityService() {
         return new DynamicSecurityService() {
@@ -48,7 +49,7 @@ public class MallSecurityConfig extends SecurityConfig {
                 for (UmsResource resource : resourceList) {
                     map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));
                 }
-                return map;
+                return map; //返回(资源url)
             }
         };
     }
