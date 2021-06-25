@@ -33,6 +33,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    //每次请求都会经过这个方法
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

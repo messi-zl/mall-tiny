@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -32,9 +33,8 @@ public class MallSecurityConfig extends SecurityConfig {
     private UmsResourceService resourceService;
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() { //JwtAuthenticationTokenFilter中才会用到
         //获取登录用户信息
-        String str = new String();
         return username -> adminService.loadUserByUsername(username); //userDetailsService(): SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现
     }
 

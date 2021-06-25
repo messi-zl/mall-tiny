@@ -52,7 +52,8 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
             }
         }
         //此处会调用AccessDecisionManager中的decide方法进行鉴权操作
-        InterceptorStatusToken token = super.beforeInvocation(fi);
+        InterceptorStatusToken token = super.beforeInvocation(fi);//会调用AccessDecisionManager中的decide方法用于鉴权操作，
+        // 而decide方法中的configAttributes参数会通过SecurityMetadataSource中的getAttributes方法来获取，configAttributes其实就是配置好的访问当前接口所需要的权限
         try {
             fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
         } finally {
