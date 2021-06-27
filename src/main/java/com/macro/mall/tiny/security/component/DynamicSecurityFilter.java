@@ -44,15 +44,19 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
             logger.info("DynamicSecurityFilter中对options请求放行");
             return;
         }
+        logger.info("DynamicSecurityFilter中：不是options请求");
         //白名单请求直接放行
         PathMatcher pathMatcher = new AntPathMatcher();
         for (String path : ignoreUrlsConfig.getUrls()) {
             if(pathMatcher.match(path,request.getRequestURI())){
-                fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+                logger.info("白名单path："+path+"    requerstUrl:"+request.getRequestURI());
+                fi.getChain().doFilter(fi.getRequest(), fi.getResponse());//开始do something
+                logger.info("22222222222");
                 logger.info("DynamicSecurityFilter中白名单放行");
                 return;
             }
         }
+        logger.info("DynamicSecurityFilter中开始鉴权");
         //此处会调用AccessDecisionManager中的decide方法进行鉴权操作
         InterceptorStatusToken token = super.beforeInvocation(fi);//会调用AccessDecisionManager中的decide方法用于鉴权操作，
         // 而decide方法中的configAttributes参数会通过SecurityMetadataSource中的getAttributes方法来获取，configAttributes其实就是配置好的访问当前接口所需要的权限
