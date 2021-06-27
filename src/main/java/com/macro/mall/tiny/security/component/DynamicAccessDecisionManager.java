@@ -1,6 +1,8 @@
 package com.macro.mall.tiny.security.component;
 
 import cn.hutool.core.collection.CollUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -16,12 +18,14 @@ import java.util.Iterator;
  * Created by macro on 2020/2/7.
  */
 public class DynamicAccessDecisionManager implements AccessDecisionManager {
+    private static final Logger logger = LoggerFactory.getLogger(DynamicAccessDecisionManager.class);
 
     @Override
     public void decide(Authentication authentication, Object object,
                        Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
         // 当接口未被配置资源时直接放行
         if (CollUtil.isEmpty(configAttributes)) {
+            logger.info("resourceUrl表中啥也没配。放行");
             return;
         }
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
@@ -31,6 +35,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
             String needAuthority = configAttribute.getAttribute();
             for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
                 if (needAuthority.trim().equals(grantedAuthority.getAuthority())) {
+                    logger.info("当前的请求上下文中Authentication.getAuthorities()值:"+grantedAuthority+",与资源表中配置的configAttributes集合中其中一元素.getAttribute()值:"+needAuthority.trim()+"。匹配一致，放行");
                     return;
                 }
             }

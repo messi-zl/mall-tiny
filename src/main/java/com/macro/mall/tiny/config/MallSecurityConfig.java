@@ -3,8 +3,11 @@ package com.macro.mall.tiny.config;
 import com.macro.mall.tiny.modules.ums.model.UmsResource;
 import com.macro.mall.tiny.modules.ums.service.UmsAdminService;
 import com.macro.mall.tiny.modules.ums.service.UmsResourceService;
+import com.macro.mall.tiny.modules.ums.service.impl.UmsAdminServiceImpl;
 import com.macro.mall.tiny.security.component.DynamicSecurityService;
 import com.macro.mall.tiny.security.config.SecurityConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MallSecurityConfig extends SecurityConfig {
+    private static final Logger logger = LoggerFactory.getLogger(MallSecurityConfig.class);
 
     @Autowired
     private UmsAdminService adminService;
@@ -35,6 +40,7 @@ public class MallSecurityConfig extends SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() { //JwtAuthenticationTokenFilter中才会用到
         //获取登录用户信息
+        logger.info("在自己安全config中定义UserDetailsService的bean");
         return username -> adminService.loadUserByUsername(username); //userDetailsService(): SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现
     }
 
@@ -44,12 +50,17 @@ public class MallSecurityConfig extends SecurityConfig {
         return new DynamicSecurityService() {
             @Override
             public Map<String, ConfigAttribute> loadDataSource() {
+                logger.info("在自己安全config中，定义DynamicSecurityService的Bean,并重写其loadDataSource方法，得到全部的resourceUrl");
                 Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
                 List<UmsResource> resourceList = resourceService.list();
                 for (UmsResource resource : resourceList) {
                     map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));
                 }
-                return map; //返回(资源url集)
+                for (String resourceUrl:map.keySet()) {
+                    logger.info("动态权限key:"+resourceUrl);
+                    logger.info("动态权限key对应的value:"+map.get(resourceUrl));
+                }
+                return map; //返回(所有资源url集)
             }
         };
     }

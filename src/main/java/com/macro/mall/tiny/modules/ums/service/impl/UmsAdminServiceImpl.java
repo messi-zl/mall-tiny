@@ -98,6 +98,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
 
     @Override
     public String login(String username, String password) {
+        LOGGER.info("现在开始登录了");
         String token = null;
         //密码需要客户端加密后传递
         try {
@@ -108,6 +109,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
             if(!userDetails.isEnabled()){
                 Asserts.fail("帐号已被禁用");
             }
+            LOGGER.info("账号密码都正常，那么上下文setAuthentication");
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);//zznote:获取token
@@ -116,6 +118,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常:{}", e.getMessage());
         }
+        LOGGER.info("返回token，login登录完毕");
         return token;
     }
 
@@ -257,6 +260,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> im
     @Override
     public UserDetails loadUserByUsername(String username){
         //获取用户信息
+        LOGGER.info("对loadUserByUsername进行重写");
         UmsAdmin admin = getAdminByUsername(username);
         if (admin != null) {
             List<UmsResource> resourceList = getResourceList(admin.getId());

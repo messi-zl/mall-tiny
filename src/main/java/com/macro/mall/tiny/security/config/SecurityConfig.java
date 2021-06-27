@@ -35,10 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests();
         //不需要保护的资源路径允许访问，yml文件中配置的白名单url设置为permit
         for (String url : ignoreUrlsConfig().getUrls()) {
+            System.out.println("DynamicSecurityFilter中白名单放行");
             registry.antMatchers(url).permitAll();
         }
         //允许跨域请求的OPTIONS请求
-        System.out.println(HttpMethod.OPTIONS);
+        System.out.println("SecurityConfig中允许跨域请求的OPTIONS请求");
         registry.antMatchers(HttpMethod.OPTIONS)
                 .permitAll();
         // 任何请求需要身份认证

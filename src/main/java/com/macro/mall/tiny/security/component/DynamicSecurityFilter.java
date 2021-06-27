@@ -41,6 +41,7 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
         //OPTIONS请求直接放行
         if(request.getMethod().equals(HttpMethod.OPTIONS.toString())){
             fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+            logger.info("DynamicSecurityFilter中对options请求放行");
             return;
         }
         //白名单请求直接放行
@@ -48,6 +49,7 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
         for (String path : ignoreUrlsConfig.getUrls()) {
             if(pathMatcher.match(path,request.getRequestURI())){
                 fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+                logger.info("DynamicSecurityFilter中白名单放行");
                 return;
             }
         }
