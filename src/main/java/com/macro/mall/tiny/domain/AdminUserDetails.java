@@ -35,7 +35,7 @@ public class AdminUserDetails implements UserDetails { //UserDetails:SpringSecur
         return collection;*/
         //返回当前用户的角色
         return resourceList.stream()
-                .map(role ->new SimpleGrantedAuthority(role.getId()+":"+role.getName()))  //role其实就是resourceList的迭代名
+                .map(resource ->new SimpleGrantedAuthority(resource.getId()+":zl："+resource.getName()))  //role其实就是resourceList的迭代名,写法需要与MallSecurityConfig中对应
                 .collect(Collectors.toList());
     }
 

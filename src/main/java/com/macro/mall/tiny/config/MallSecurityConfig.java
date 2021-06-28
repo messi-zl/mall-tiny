@@ -53,8 +53,11 @@ public class MallSecurityConfig extends SecurityConfig {
                 logger.info("在自己安全config中，定义DynamicSecurityService的Bean,并重写其loadDataSource方法，得到全部的resourceUrl");
                 Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
                 List<UmsResource> resourceList = resourceService.list();
+                if (!resourceList.isEmpty()){
+                    logger.info("现资源表中数据：："+resourceList.toString());
+                }
                 for (UmsResource resource : resourceList) {
-                    map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));//必须这样写才能匹配
+                    map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":zl：" + resource.getName()));//这里的写法需要与自己UserDetalis中对应
                 }
                 for (String resourceUrl:map.keySet()) {
                     logger.info("动态权限key:"+resourceUrl);

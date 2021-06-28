@@ -33,22 +33,23 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        if (configAttributeMap == null) this.loadDataSource();
+        clearDataSource();//不然不会再去loadDataSource的
+        if (configAttributeMap == null) this.loadDataSource();//configAttributeMap("所有resourceUrl","id：zl：name")
         List<ConfigAttribute>  configAttributes = new ArrayList<>();
         //获取当前访问的路径
         String url = ((FilterInvocation) o).getRequestUrl();
         String path = URLUtil.getPath(url);
         PathMatcher pathMatcher = new AntPathMatcher();
-        Iterator<String> iterator = configAttributeMap.keySet().iterator();
+        Iterator<String> iterator = configAttributeMap.keySet().iterator();//map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()))
         //获取访问该路径所需资源
         while (iterator.hasNext()) {
             String pattern = iterator.next();
-            if (pathMatcher.match(pattern, path)) {
+            if (pathMatcher.match(pattern, path)) { //key值匹配，则将value add进来
                 configAttributes.add(configAttributeMap.get(pattern));
             }
         }
-        // 未设置操作请求权限，返回空集合
-        return configAttributes;
+        // 未设置操作请求权限，返回空集合。request的url能在所有resourceUrl中找到则add进来
+        return configAttributes;//("id:zl:name")
     }
 
     @Override

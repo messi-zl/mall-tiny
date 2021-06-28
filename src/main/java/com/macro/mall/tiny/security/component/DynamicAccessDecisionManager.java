@@ -25,7 +25,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
                        Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
         // 当接口未被配置资源时直接放行
         if (CollUtil.isEmpty(configAttributes)) {
-            logger.info("resourceUrl表中啥也没配。放行");
+            logger.info("该url在resourceUrl表中没配，放行");
             return;
         }
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
