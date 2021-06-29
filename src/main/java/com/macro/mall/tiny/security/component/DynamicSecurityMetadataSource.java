@@ -27,7 +27,7 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
     }
 
     public void clearDataSource() {
-        configAttributeMap.clear();
+        if (configAttributeMap !=null) configAttributeMap.clear();//避免下面报空指针
         configAttributeMap = null;
     }
 

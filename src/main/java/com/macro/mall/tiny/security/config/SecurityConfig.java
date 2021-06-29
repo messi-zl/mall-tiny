@@ -56,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拒绝处理类
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(restfulAccessDeniedHandler())
-                .authenticationEntryPoint(restAuthenticationEntryPoint())
+                .accessDeniedHandler(restfulAccessDeniedHandler())//处理 AccessDeniedException 异常
+                .authenticationEntryPoint(restAuthenticationEntryPoint())//处理 AuthenticationException 异常
                 // 自定义权限拦截器JWT过滤器,每次请求都会经过它
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -17,10 +17,11 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 
 jwt:
-  tokenHeader: Authorization #JWT存储的请求头
-  secret: mall-admin-secret #JWT加解密使用的密钥
-  expiration: 604800 #JWT的超期限时间(60*60*24*7),单位秒，即一周
-  tokenHead: 'Bearer '  #JWT负载中拿到开头
+  tokenHeader: authorization #JWT存储的请求头,固定写死
+  secret: mall-admin-secret #JWT加解密使用的密钥，随意
+  expiration: 604800 #JWT的超期限时间(60*60*24*7),单位秒，即一周，随意
+  tokenHead: 'myflag '  #JWT负载中拿到开头，可随意
+  #tokenHead: 'Bearer '  #JWT负载中拿到开头，随意
 
 redis:
   database: mall

@@ -20,6 +20,8 @@ import java.util.Iterator;
 public class DynamicAccessDecisionManager implements AccessDecisionManager {
     private static final Logger logger = LoggerFactory.getLogger(DynamicAccessDecisionManager.class);
 
+    //只有不是白名单及options的请求才会到该方法，首先会拿到all资源集，然后比对
+    //authentication未set值，会抛出错（两个地方会set值：登录成功后会set+jwt过滤器中token有值且有效会set）
     @Override
     public void decide(Authentication authentication, Object object,
                        Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
@@ -33,14 +35,14 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
             ConfigAttribute configAttribute = iterator.next();
             //将访问所需资源或用户拥有资源进行比对
             String needAuthority = configAttribute.getAttribute();
-            for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+            for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) { //authentication若之前没有set值会报错
                 if (needAuthority.trim().equals(grantedAuthority.getAuthority())) {
                     logger.info("当前的请求上下文中Authentication.getAuthorities()值:"+grantedAuthority+",与资源表中配置的configAttributes集合中其中一元素.getAttribute()值:"+needAuthority.trim()+"。匹配一致，放行");
                     return;
                 }
             }
         }
-        throw new AccessDeniedException("抱歉，您没有访问权限");
+        throw new AccessDeniedException("抱歉，您没有访问权限");//抛出AccessDeniedException异常后，由安全config的restfulAccessDeniedHandler()处理
     }
 
     @Override
