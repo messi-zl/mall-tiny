@@ -37,11 +37,13 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
             String needAuthority = configAttribute.getAttribute();
             for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) { //authentication若之前没有set值会报错
                 if (needAuthority.trim().equals(grantedAuthority.getAuthority())) {
+                    logger.info("configAttributes中有元素={}，与当前用户有权限的元素={}相等，放行",needAuthority.trim(),grantedAuthority.getAuthority());
                     logger.info("当前的请求上下文中Authentication.getAuthorities()值:"+grantedAuthority+",与资源表中配置的configAttributes集合中其中一元素.getAttribute()值:"+needAuthority.trim()+"。匹配一致，放行");
                     return;
                 }
             }
         }
+        logger.warn("sorry,无权限");
         throw new AccessDeniedException("抱歉，您没有访问权限");//抛出AccessDeniedException异常后，由安全config的restfulAccessDeniedHandler()处理
     }
 
