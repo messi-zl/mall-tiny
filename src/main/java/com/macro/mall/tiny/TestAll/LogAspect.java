@@ -36,6 +36,23 @@ import java.util.Map;
 public class LogAspect {
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
+    /*
+    * 正常执行的顺序是：
+    * Around  开始
+    * Before
+    * Around  结束
+    * After
+    * AfterReturning
+    * */
+
+    /*
+     * 异常执行的顺序是：
+     * Around  开始
+     * Before
+     * After
+     * AfterThrowing
+     * */         //success：在around里可以统计方法执行时间，保存日志  faile：在AfterThrowing中进行保存日志
+
     @Pointcut("@annotation(com.macro.mall.tiny.TestAll.CustomAnnotation)")    //切点为使用该注解的地方，只要使用了该注解就会被切入
     //@Pointcut("execution(public * com.sim.wifi.upgrade.modules.permissions.controller.*.*(..))")  //切点为该路径下的所有public方法
     public void pointCutPlace() {
@@ -97,12 +114,44 @@ public class LogAspect {
 
     @AfterThrowing(pointcut = "pointCutPlace()", throwing = "myEx")
     public void afterThrowing(JoinPoint joinPoint, Throwable myEx) {
+        System.out.println("**********************AfterThrowing  ************************");
+        WebLog webLog = new WebLog();
+        webLog = getWebLog(webLog,joinPoint);
+        logger.info("nnnnnn{}", JSONUtil.parse(webLog));
         Signature signature = joinPoint.getSignature();
         String method = signature.getName();
         // 处理异常的逻辑
         logger.info("执行方法{}出错，异常为：{}", method, myEx);
     }
 
+
+    /**
+     * @Description :为WebLog赋值
+     * @Date 2021/7/8
+     * @param
+     *@return
+     **/
+    public WebLog getWebLog(WebLog webLog,JoinPoint joinPoint){
+        //获取当前请求对象
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        //记录请求信息
+        Signature signature = joinPoint.getSignature();//签名
+        MethodSignature methodSignature = (MethodSignature) signature;
+        Method method = methodSignature.getMethod();
+        if (method.isAnnotationPresent(ApiOperation.class)) {
+            ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+            webLog.setDescription(apiOperation.value());
+        }
+        String urlStr = request.getRequestURL().toString();
+        webLog.setBasePath(StrUtil.removeSuffix(urlStr, URLUtil.url(urlStr).getPath()));
+        webLog.setIp(request.getRemoteUser());
+        webLog.setMethod(request.getMethod());
+        webLog.setParameter(getParameter(method, joinPoint.getArgs()));
+        webLog.setUri(request.getRequestURI());
+        webLog.setUrl(request.getRequestURL().toString());
+        return webLog;
+    }
 
     /**
      * 根据方法和传入的参数获取请求参数
