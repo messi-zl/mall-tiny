@@ -60,6 +60,8 @@ public class MyBatisPlusGenerator {
     private static GlobalConfig initGlobalConfig(String projectPath) {
         GlobalConfig globalConfig = new GlobalConfig();
         globalConfig.setOutputDir(projectPath + "/src/main/java");
+        System.out.println(globalConfig.getOutputDir());
+        System.out.println("1111");
         globalConfig.setAuthor("macro");
         globalConfig.setOpen(false);
         globalConfig.setSwagger2(true);
